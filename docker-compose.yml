@@ -1,0 +1,96 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "8100:8100"
+    environment:
+      - SERVICE_STATE=${FRONTEND_STATE:-healthy}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8100/health')\""]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  auth:
+    build:
+      context: .
+      dockerfile: auth/Dockerfile
+    ports:
+      - "8101:8101"
+    environment:
+      - SERVICE_STATE=${AUTH_STATE:-healthy}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8101/health')\""]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  payment:
+    build:
+      context: .
+      dockerfile: payment/Dockerfile
+    ports:
+      - "8102:8102"
+    environment:
+      - SERVICE_STATE=${PAYMENT_STATE:-healthy}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8102/health')\""]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  catalog:
+    build:
+      context: .
+      dockerfile: catalog/Dockerfile
+    ports:
+      - "8103:8103"
+    environment:
+      - SERVICE_STATE=${CATALOG_STATE:-healthy}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8103/health')\""]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  api_gateway:
+    build:
+      context: .
+      dockerfile: api_gateway/Dockerfile
+    ports:
+      - "8104:8104"
+    environment:
+      - SERVICE_STATE=${API_GATEWAY_STATE:-healthy}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8104/health')\""]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  database:
+    build:
+      context: .
+      dockerfile: database/Dockerfile
+    ports:
+      - "8105:8105"
+    environment:
+      - SERVICE_STATE=${DATABASE_STATE:-healthy}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8105/health')\""]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
